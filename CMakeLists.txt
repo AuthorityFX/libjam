@@ -19,8 +19,13 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+option(PACKAGE_TESTS "Build the tests" ON)
+if(PACKAGE_TESTS)
+  enable_testing()
+  include(GoogleTest)
+  add_subdirectory(tests)
+endif()
 
-add_subdirectory(tests EXCLUDE_FROM_ALL)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 add_library(jam SHARED src/jam.cpp)
