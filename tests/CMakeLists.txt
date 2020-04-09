@@ -2,6 +2,8 @@ enable_testing()
 
 add_subdirectory("${PROJECT_SOURCE_DIR}/external/googletest" "external/googletest")
 
+include_directories(${PROJECT_SOURCE_DIR}/external/GSL/include)
+
 # keeps cache cleaner
 mark_as_advanced(
   BUILD_GMOCK BUILD_GTEST BUILD_SHARED_LIBS
