@@ -3,12 +3,19 @@
     - id: cmake-format
       name: CMake format
       description: Format CMake files with cmake-format.
-      entry: ./scripts/cmake_format.py
+      entry: cmake-format
+      args: [-i]
       language: python
       types: [cmake]
     - id: cmake-lint
       name: CMake lint
       description: Lint CMake files with cmake-lint.
-      entry: ./scripts/cmake_lint.py
+      entry: cmake-lint
       language: python
       types: [cmake]
+    - id: clang-tidy
+      name: Clang tidy
+      description: Lint C++ with clang-tidy.
+      entry: ./scripts/clang_tidy.py
+      language: python
+      files: '.*\.cpp'
