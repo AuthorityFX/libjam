@@ -6,4 +6,5 @@ format:
   dangle_parens: True
 
 lint:
-  function_pattern: "[0-9a-z]+"
+  function_pattern: "[0-9a-z_]+"
+  max_statement_spacing: 2

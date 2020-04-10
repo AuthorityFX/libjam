@@ -1,0 +1,14 @@
+- repo: local
+  hooks:
+    - id: cmake-format
+      name: CMake format
+      description: Format CMake files with cmake-format.
+      entry: ./scripts/cmake_format.py
+      language: python
+      types: [cmake]
+    - id: cmake-lint
+      name: CMake lint
+      description: Lint CMake files with cmake-lint.
+      entry: ./scripts/cmake_lint.py
+      language: python
+      types: [cmake]
