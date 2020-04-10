@@ -16,7 +16,7 @@ AllowShortIfStatementsOnASingleLine: false
 
 AccessModifierOffset: -2
 AlignConsecutiveAssignments: true
-AlignConsecutiveMacros: true
+# AlignConsecutiveMacros: true
 
 DerivePointerAlignment: false
 PointerAlignment: Left
