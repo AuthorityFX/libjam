@@ -3,11 +3,14 @@ project(jammage_station)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 
+include(force_colored_output)
+force_colored_output()
+
 include(install_cmake_format)
 install_cmake_format()
 
-include(force_colored_output)
-force_colored_output()
+include(install_pre_commit)
+install_pre_commit()
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)

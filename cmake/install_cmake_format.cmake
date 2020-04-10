@@ -1,34 +1,13 @@
+include(install_pip_package)
+
 # Install cmake-format using pip
 function(install_cmake_format)
-  # Just return is cmake is already marked in cache as installed
-  if(CMAKE_FORMAT_INSTALLED EQUAL true)
+  if(${CMAKE_FORMAT_INSTALLED})
     return()
   endif()
-  # check list of installed pip packages
-  execute_process(
-    COMMAND pip list
-    OUTPUT_VARIABLE _output
-    ERROR_VARIABLE _error
-    RESULT_VARIABLE _return
+  install_pip_package(NAME "cmake-format")
+  set(CMAKE_FORMAT_INSTALLED
+      true
+      CACHE BOOL "cmake-format is installed"
   )
-  # Throw is return code not 0
-  if(NOT _return EQUAL 0)
-    message(FATAL_ERROR ${_error})
-  endif()
-  # Regex for cmake-format in package list
-  string(REGEX MATCH "cmake-format" _match ${_output})
-  # If cmake-list not found in package list, install for user (avoid sudo)
-  if(NOT _match)
-    message(STATUS "Installing cmake-format")
-    execute_process(
-      COMMAND pip install --user cmake-format RESULT_VARIABLE _return
-    )
-  endif()
-  # Set cache variable to true if _return code 0
-  if(_return EQUAL 0)
-    set(CMAKE_FORMAT_INSTALLED
-        true
-        CACHE BOOL "cmake-format is installed"
-    )
-  endif()
 endfunction()
