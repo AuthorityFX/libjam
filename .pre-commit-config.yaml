@@ -1,21 +1,27 @@
 - repo: local
   hooks:
     - id: cmake-format
-      name: CMake format
+      name: CMake Format
       description: Format CMake files with cmake-format.
       entry: cmake-format
       args: [-i]
       language: python
       types: [cmake]
     - id: cmake-lint
-      name: CMake lint
+      name: CMake Lint
       description: Lint CMake files with cmake-lint.
       entry: cmake-lint
       language: python
       types: [cmake]
     - id: clang-tidy
-      name: Clang tidy
+      name: Clang Tidy
       description: Lint C++ with clang-tidy.
       entry: ./scripts/clang_tidy.py
       language: python
       files: '.*\.cpp'
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v2.5.0
+  hooks:
+    - id: trailing-whitespace
+    - id: end-of-file-fixer
+    - id: check-yaml
