@@ -25,6 +25,10 @@
       entry: ./scripts/clang_tidy.py
       language: python
       files: '.*\.cpp'
+- repo: https://github.com/pre-commit/mirrors-autopep8
+  rev: 5c459f3f27ae62fefef60fe5771e51baa02e7a83
+  hooks:
+    -   id: autopep8
 - repo: https://github.com/pre-commit/mirrors-mypy
   rev: 323f177eb169987f7034a75d0a195e4448eec0ba
   hooks:
