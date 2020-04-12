@@ -13,6 +13,12 @@
       entry: cmake-lint
       language: python
       types: [cmake]
+    - id: clang-format
+      name: Clang Format
+      description: Format C++ with clang-format.
+      entry: ./scripts/clang_format.py
+      language: python
+      files: '.*\.cpp'
     - id: clang-tidy
       name: Clang Tidy
       description: Lint C++ with clang-tidy.
