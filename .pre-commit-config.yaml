@@ -19,6 +19,10 @@
       entry: ./scripts/clang_tidy.py
       language: python
       files: '.*\.cpp'
+- repo: https://github.com/pre-commit/mirrors-mypy
+  rev: 323f177eb169987f7034a75d0a195e4448eec0ba
+  hooks:
+    - id: mypy
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v2.5.0
   hooks:

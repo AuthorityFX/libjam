@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import os.path
 import argparse
 import subprocess
 from typing import Optional
@@ -43,5 +42,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     command.extend(args.filenames)
 
     return subprocess.call(command)
+
+
 if __name__ == '__main__':
     exit(main())
