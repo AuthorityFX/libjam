@@ -1,24 +1,28 @@
+# - repo: https://github.com/iconmaster5326/cmake-format-pre-commit-hook
+  # rev: master
+  # hooks:
+    # - id: cmake-format
 - repo: local
   hooks:
     - id: cmake-format
       name: CMake Format
       description: Format CMake files with cmake-format.
       entry: cmake-format
-      args: [-i]
+      args: ["-i"]
       language: python
-      types: [cmake]
+      files: (CMakeLists.*|.*\.cmake|.*\.cmake.in)$
     - id: cmake-lint
       name: CMake Lint
       description: Lint CMake files with cmake-lint.
       entry: cmake-lint
       language: python
-      types: [cmake]
+      files: '.*\.cmake$'
     - id: clang-format
       name: Clang Format
       description: Format C++ with clang-format.
       entry: ./scripts/clang_format.py
       language: python
-      files: '.*\.cpp'
+      files: '.*\.cpp$'
     - id: clang-tidy
       name: Clang Tidy
       description: Lint C++ with clang-tidy.
@@ -28,7 +32,7 @@
 - repo: https://github.com/pre-commit/mirrors-autopep8
   rev: 5c459f3f27ae62fefef60fe5771e51baa02e7a83
   hooks:
-    -   id: autopep8
+    - id: autopep8
 - repo: https://github.com/pre-commit/mirrors-mypy
   rev: 323f177eb169987f7034a75d0a195e4448eec0ba
   hooks:

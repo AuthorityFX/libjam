@@ -9,6 +9,9 @@ force_colored_output()
 include(install_cmake_format)
 install_cmake_format()
 
+include(install_compdb)
+install_compdb()
+
 include(install_pre_commit)
 install_pre_commit()
 
@@ -35,3 +38,12 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/external/GSL/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 add_library(jam SHARED src/jam.cpp)
+
+add_custom_target(
+  TARGET
+  build${PROJECT} compdb ALL
+  COMMAND compdb -p build/ list > compile_commands.json
+  VERBATIM
+  COMMAND bash -c "compdb -p build/ list > compile_commands.json"
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+)

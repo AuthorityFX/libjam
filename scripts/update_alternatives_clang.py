@@ -40,7 +40,6 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     update_alternative = UpdateAlternative(argv)
     update_alternative.add_install('clang')
     slaves: List[str] = [
-        'clang++',
         'clang-apply-replacements',
         'clang-change-namespace',
         'clang-check',
@@ -58,7 +57,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         'clang-reorder-fields',
         'clang-scan-deps',
         'clang-tidy',
-        'lldb-server',
+        'clang++',
+        'clangd',
         'lldb',
     ]
     for slave in slaves:
