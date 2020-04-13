@@ -6,5 +6,6 @@ format:
   dangle_parens: True
 
 lint:
+  disabled_codes: [C0113, C0103]
   function_pattern: "[0-9a-z_]+"
   max_statement_spacing: 2

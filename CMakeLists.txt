@@ -3,28 +3,31 @@ project(jammage_station)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 
+# Set force colored output for prettify Ninja output
 include(force_colored_output)
 force_colored_output()
 
+# Install cmake-format python package
 include(install_cmake_format)
 install_cmake_format()
 
-include(install_compdb)
-install_compdb()
-
+# Install pre-commit python package
 include(install_pre_commit)
 install_pre_commit()
 
+# Generate compile_commands database
+include(compdb)
+
+# TODO: move to cmake directory
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
   set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS} -O2 -DNDEBUG -Wall")
 endif()
 
+# TODO: move to cmake directory
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 option(PACKAGE_TESTS "Build the tests" ON)
 if(PACKAGE_TESTS)
@@ -33,20 +36,18 @@ if(PACKAGE_TESTS)
   add_subdirectory(tests)
 endif()
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/external/GSL/include)
+# TODO: move to cmake directory
+add_library(gsl INTERFACE)
+target_include_directories(
+  gsl
+  PRIVATE
+  INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/external/GSL/include
+)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-
-# include(pjproject)
+# Include pjproject for SIP libs
+include(pjproject)
 
 add_library(jam SHARED src/jam.cpp)
-# target_link_libraries(jam PRIVATE STATIC pjsip)
-
-add_custom_target(
-  TARGET
-  build${PROJECT} compdb ALL
-  COMMAND compdb -p build/ list > compile_commands.json
-  VERBATIM
-  COMMAND bash -c "compdb -p build/ list > compile_commands.json"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
+target_include_directories(jam PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_link_libraries(jam PRIVATE pjsip)
+target_link_libraries(jam PRIVATE gsl)

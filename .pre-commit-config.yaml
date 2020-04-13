@@ -1,7 +1,8 @@
-# - repo: https://github.com/iconmaster5326/cmake-format-pre-commit-hook
-  # rev: master
-  # hooks:
-    # - id: cmake-format
+# - repo: https://github.com/cheshirekow/cmake-format-precommit
+#   rev: v0.6.9
+#   hooks:
+#     - id: cmake-format
+#     - id: cmake-lint
 - repo: local
   hooks:
     - id: cmake-format
