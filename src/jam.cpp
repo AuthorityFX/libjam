@@ -3,6 +3,8 @@
 
 #include <gsl/gsl>
 
+#include <pjsip.h>
+
 #include "jam.h"
 
 void test(gsl::owner<int*> ptr) { delete ptr; }
