@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.11)
 project(jammage_station)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
@@ -37,7 +37,10 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/external/GSL/include)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+# include(pjproject)
+
 add_library(jam SHARED src/jam.cpp)
+# target_link_libraries(jam PRIVATE STATIC pjsip)
 
 add_custom_target(
   TARGET
