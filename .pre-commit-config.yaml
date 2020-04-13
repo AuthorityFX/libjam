@@ -1,23 +1,10 @@
-# - repo: https://github.com/cheshirekow/cmake-format-precommit
-#   rev: v0.6.9
-#   hooks:
-#     - id: cmake-format
-#     - id: cmake-lint
-- repo: local
+- repo: https://github.com/cheshirekow/cmake-format-precommit
+  rev: v0.6.9
   hooks:
     - id: cmake-format
-      name: CMake Format
-      description: Format CMake files with cmake-format.
-      entry: cmake-format
-      args: ["-i"]
-      language: python
-      files: (CMakeLists.*|.*\.cmake|.*\.cmake.in)$
     - id: cmake-lint
-      name: CMake Lint
-      description: Lint CMake files with cmake-lint.
-      entry: cmake-lint
-      language: python
-      files: '.*\.cmake$'
+- repo: local
+  hooks:
     - id: clang-format
       name: Clang Format
       description: Format C++ with clang-format.

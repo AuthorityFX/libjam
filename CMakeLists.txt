@@ -7,10 +7,6 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 include(force_colored_output)
 force_colored_output()
 
-# Install cmake-format python package
-include(install_cmake_format)
-install_cmake_format()
-
 # Install pre-commit python package
 include(install_pre_commit)
 install_pre_commit()
