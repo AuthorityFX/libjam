@@ -15,11 +15,24 @@ set(pjlib-util_LIBRARY
     "${pjproject_SOURCE_DIR}/pjlib-util/lib/libpjlib-util-${pj_target}.a"
 )
 set(pjsip_LIBRARY "${pjproject_SOURCE_DIR}/pjsip/lib/libpjsip-${pj_target}.a")
+set(pjnath_LIBRARY
+    "${pjproject_SOURCE_DIR}/pjnath/lib/libpjnath-${pj_target}.a"
+)
+set(pjmedia_LIBRARY
+    "${pjproject_SOURCE_DIR}/pjmedia/lib/libpjmedia-${pj_target}.a"
+)
 list(APPEND pj_libraries ${pjlib_LIBRARY})
 list(APPEND pj_libraries ${pjlib-util_LIBRARY})
 list(APPEND pj_libraries ${pjsip_LIBRARY})
+list(APPEND pj_libraries ${pjnath_LIBRARY})
+list(APPEND pj_libraries ${pjmedia_LIBRARY})
 
 add_custom_target(pjproject DEPENDS ${pj_libraries})
+
+set_target_properties(
+  pjproject PROPERTIES RULE_LAUNCH_CUSTOM
+                       [=[env CFLAGS="-fPIC" CPPFLAGS="-fPIC"]=]
+)
 
 add_custom_command(
   OUTPUT ${pj_libraries}
@@ -32,9 +45,9 @@ add_custom_command(
     --disable-libyuv --disable-opencore-amr --disable-silk --enable-ext-sound
     --enable-ssl
   COMMAND make dep && make clean && make -j8
-  COMMAND make -j8
   WORKING_DIRECTORY ${pjproject_SOURCE_DIR}
   COMMENT "Build pjproject"
+  USES_TERMINAL
 )
 
 # Create IMPORTED library for pjproject library
@@ -57,3 +70,5 @@ endmacro()
 add_pj_library(NAME pjlib)
 add_pj_library(NAME pjlib-util)
 add_pj_library(NAME pjsip)
+add_pj_library(NAME pjnath)
+add_pj_library(NAME pjmedia)
