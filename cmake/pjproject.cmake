@@ -8,7 +8,7 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(pjproject)
 
-set(pj_target "x86_64-pc-none")
+set(pj_target "x86_64-unknown-linux-gnu")
 
 set(pjlib_LIBRARY "${pjproject_SOURCE_DIR}/pjlib/lib/libpj-${pj_target}.a")
 set(pjlib-util_LIBRARY
@@ -36,15 +36,10 @@ set_target_properties(
 
 add_custom_command(
   OUTPUT ${pj_libraries}
-  COMMAND
-    ./configure --target=x86_64 --disable-video --disable-bcg729
-    --disable-ffmpeg --disable-openh264 --disable-sdl --disable-v4l2
-    --disable-vpx --disable-g711-codec --disable-g722-codec
-    --disable-g7221-codec --disable-gsm-codec --disable-ilbc-codec
-    --disable-l16-codec --disable-large-filter --disable-libwebrtc
-    --disable-libyuv --disable-opencore-amr --disable-silk --enable-ext-sound
-    --enable-ssl
-  COMMAND make dep && make clean && make -j8
+  COMMAND ./configure
+  COMMAND make dep
+  COMMAND make clean
+  COMMAND make
   WORKING_DIRECTORY ${pjproject_SOURCE_DIR}
   COMMENT "Build pjproject"
   USES_TERMINAL
@@ -52,7 +47,7 @@ add_custom_command(
 
 # Create IMPORTED library for pjproject library
 macro(add_pj_library)
-  cmake_parse_arguments(_args "NO_LIB" "NAME" "" ${ARGN})
+  cmake_parse_arguments(_args "" "NAME" "" ${ARGN})
   if(NOT _args_NAME)
     message(FATAL_ERROR "'NAME' keyword argument missing")
   endif()

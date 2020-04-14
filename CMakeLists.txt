@@ -14,11 +14,9 @@ install_pre_commit()
 # Generate compile_commands database
 include(compdb)
 
-# TODO: move to cmake directory
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Release)
-  set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS} -O2 -DNDEBUG -Wall")
-endif()
+# TODO: move to cmake directory if(NOT CMAKE_BUILD_TYPE) set(CMAKE_BUILD_TYPE
+# Release) set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS} -O2 -DNDEBUG -Wall")
+# endif()
 
 # TODO: move to cmake directory
 set(CMAKE_CXX_STANDARD 17)
@@ -45,5 +43,5 @@ include(pjproject)
 
 add_library(jam SHARED src/jam.cpp)
 target_include_directories(jam PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(jam PRIVATE pjlib pjlib-util pjsip pjnath pjmedia)
+target_link_libraries(jam PUBLIC pjlib pjlib-util pjsip pjnath pjmedia)
 target_link_libraries(jam PRIVATE gsl)

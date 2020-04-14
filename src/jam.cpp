@@ -40,6 +40,7 @@ void do_somthing()
   name_addr      = pjsip_name_addr_create(pool);
   name_addr->uri = (pjsip_uri*)sip_uri;
   // Done
+  std::cout << name_addr->uri << std::endl;
 }
 
 void test(gsl::owner<int*> ptr) { delete ptr; }
