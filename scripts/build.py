@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import multiprocessing
 import subprocess
 import os
 from typing import Optional
@@ -15,10 +16,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     if (os.path.exists(build_directory) is False):
         os.mkdir(build_directory)
 
+    toolchain_directory = os.path.join(project_directory, 'cmake/toolchain')
+
+    toolchain = os.path.join(toolchain_directory, 'clang-linux-x86_64.cmake')
+
     cmake_command = ['cmake']
-    cmake_command.append('-GNinja')
-    cmake_command.append('-DCMAKE_C_COMPILER=clang')
-    cmake_command.append('-DCMAKE_CXX_COMPILER=clang++')
+    # TODO: fPIC linker issue with pjproject
+    # cmake_command.append('-GNinja')
+    cmake_command.append(f'-DCMAKE_TOOLCHAIN_FILE={toolchain}')
     cmake_command.append('..')
 
     return_value: int
@@ -27,7 +32,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     if (return_value != 0):
         raise Exception("Failed to configure")
 
-    build_command = ['ninja']
+    build_command = ['make', f'-j{multiprocessing.cpu_count()}']
     return_value = subprocess.call(build_command, cwd=build_directory)
     if (return_value != 0):
         raise Exception("Failed to build")

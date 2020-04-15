@@ -36,13 +36,13 @@ set_target_properties(
 
 add_custom_command(
   OUTPUT ${pj_libraries}
-  COMMAND ./configure
+  COMMAND ${CMAKE_COMMAND} -E env CC=${CMAKE_C_COMPILER} ./configure
   COMMAND make dep
   COMMAND make clean
   COMMAND make
   WORKING_DIRECTORY ${pjproject_SOURCE_DIR}
   COMMENT "Build pjproject"
-  USES_TERMINAL
+  USES_TERMINAL VERBATIM
 )
 
 # Create IMPORTED library for pjproject library
