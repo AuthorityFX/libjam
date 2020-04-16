@@ -55,9 +55,8 @@ macro(add_pj_library)
   set_target_properties(
     ${_args_NAME} PROPERTIES IMPORTED_LOCATION "${${_args_NAME}_LIBRARY}"
   )
-  set_target_properties(
-    ${_args_NAME} PROPERTIES INTERFACE_INCLUDE_DIRECTORIES
-                             "${pjproject_SOURCE_DIR}/${_args_NAME}/include"
+  target_include_directories(
+    ${_args_NAME} INTERFACE "${pjproject_SOURCE_DIR}/${_args_NAME}/include"
   )
   add_dependencies(${_args_NAME} pjproject)
 endmacro()
