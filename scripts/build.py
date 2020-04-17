@@ -37,6 +37,11 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     if (return_value != 0):
         raise Exception("Failed to build")
 
+    test_command = ['make', 'test']
+    return_value = subprocess.call(test_command, cwd=build_directory)
+    if (return_value != 0):
+        raise Exception("Tests failed")
+
     return return_value
 
 

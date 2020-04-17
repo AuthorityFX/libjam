@@ -10,9 +10,9 @@ from typing import List
 class UpdateAlternative():
     def __init__(self, argsv: Optional[Sequence[str]]) -> None:
         parser = argparse.ArgumentParser()
-        parser.add_argument('-v', '--version', nargs=1,
+        parser.add_argument('-v', '--version', required=True, nargs=1,
                             type=int, help='Clang version')
-        parser.add_argument('-p', '--priority', nargs=1,
+        parser.add_argument('-p', '--priority', required=True, nargs=1,
                             type=int, help='update-alternatives priority')
         args = parser.parse_args(argsv)
 
@@ -26,20 +26,28 @@ class UpdateAlternative():
                 f'/usr/bin/{name}-{self._version}', str(self._priority)]
         )
 
-    def add_slave(self, name: str) -> None:
+    def add_slave(self, slave: str) -> None:
         self._command.extend(
-            ['--slave', f'/usr/bin/{name}', name,
-                f'/usr/bin/{name}-{self._version}']
+            ['--slave', f'/usr/bin/{slave}', slave,
+                f'/usr/bin/{slave}-{self._version}']
         )
+
+    def add_slaves(self, slaves: List[str]) -> None:
+        for slave in slaves:
+            self.add_slave(slave)
 
     def install(self) -> int:
         return subprocess.call(self._command)
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
-    update_alternative = UpdateAlternative(argv)
-    update_alternative.add_install('clang')
-    slaves: List[str] = [
+    return_value: int
+
+    clang_alternative = UpdateAlternative(argv)
+    clang_alternative.add_install('clang')
+    clang_alternative.add_slaves([
+        'clang++',
+        'clangd',
         'clang-apply-replacements',
         'clang-change-namespace',
         'clang-check',
@@ -57,14 +65,70 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         'clang-reorder-fields',
         'clang-scan-deps',
         'clang-tidy',
-        'clang++',
-        'clangd',
         'lldb',
-    ]
-    for slave in slaves:
-        update_alternative.add_slave(slave)
+    ])
+    return_value = clang_alternative.install()
+    if(return_value != 0):
+        return return_value
 
-    return update_alternative.install()
+    llvm_alternative = UpdateAlternative(argv)
+    llvm_alternative.add_install('llvm-config')
+    llvm_alternative.add_slaves([
+        'lld',
+        'lli-child-target',
+        'llvm-addr2line',
+        'llvm-ar',
+        'llvm-as',
+        'llvm-bcanalyzer',
+        'llvm-c-test',
+        'llvm-cat',
+        'llvm-cfi-verify',
+        'llvm-cov',
+        'llvm-cvtres',
+        'llvm-cxxdump',
+        'llvm-cxxfilt',
+        'llvm-cxxmap',
+        'llvm-diff',
+        'llvm-dis',
+        'llvm-dlltool',
+        'llvm-dwarfdump',
+        'llvm-dwp',
+        'llvm-elfabi',
+        'llvm-exegesis',
+        'llvm-extract',
+        'llvm-jitlink',
+        'llvm-lib',
+        'llvm-link',
+        'llvm-lipo',
+        'llvm-lto',
+        'llvm-lto2',
+        'llvm-mc',
+        'llvm-mca',
+        'llvm-modextract',
+        'llvm-mt',
+        'llvm-nm',
+        'llvm-objcopy',
+        'llvm-objdump',
+        'llvm-opt-report',
+        'llvm-pdbutil',
+        'llvm-PerfectShuffle',
+        'llvm-profdata',
+        'llvm-ranlib',
+        'llvm-rc',
+        'llvm-readelf',
+        'llvm-readobj',
+        'llvm-rtdyld',
+        'llvm-size',
+        'llvm-split',
+        'llvm-stress',
+        'llvm-strings',
+        'llvm-strip',
+        'llvm-symbolizer',
+        'llvm-tblgen',
+        'llvm-undname',
+        'llvm-xray',
+    ])
+    return llvm_alternative.install()
 
 
 if __name__ == '__main__':
