@@ -43,7 +43,7 @@ add_custom_command(
   COMMAND
     ${CMAKE_COMMAND} -E env CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER}
     CFLAGS=${_cflags} CXXFLAGS=${_cflags} LDFLAGS=${_linker_flags} ./waf
-    configure "--prefix=${jack2_BINARY_DIR}" "-j${N}" --doxygen=no --alsa=yes
+    configure "--prefix=${jack2_BINARY_DIR}" "-j${N}" --doxygen=no
   COMMAND ./waf
   COMMAND ./waf install
   COMMAND_EXPAND_LISTS
