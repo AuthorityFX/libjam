@@ -13,12 +13,37 @@ add_custom_target(jack2 DEPENDS "${jack2_BINARY_DIR}/include/jack/jack.h")
 include(ProcessorCount)
 processorcount(N)
 
+set(_cflags "")
+set(_cxxflags "")
+set(_linker_flags "")
+list(
+  APPEND
+  _cflags
+  "-march=x86-64"
+  "-mtune=generic"
+  "-O3"
+  "-pipe"
+  "-fno-plt"
+  "-Wall"
+  "-D_FORTIFY_SOURCE=2"
+)
+list(APPEND _cxxflags ${_cflags} "std=gnu++11")
+list(APPEND _linker_flags "-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now")
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  list(PREPEND _cflags "-flto=thin")
+  list(PREPEND _cxxflags "-flto=thin")
+  list(PREPEND _linker_flags "-fuse-ld=lld")
+endif()
+list(JOIN _cflags " " _cflags)
+list(JOIN _cxxflags " " _cxxflags)
+list(JOIN _linker_flags " " _linker_flags)
+
 add_custom_command(
   OUTPUT "${jack2_BINARY_DIR}/include/jack/jack.h"
   COMMAND
     ${CMAKE_COMMAND} -E env CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER}
-    ./waf configure "--prefix=${jack2_BINARY_DIR}" "-j${N}" --doxygen=no
-    --alsa=yes
+    CFLAGS=${_cflags} CXXFLAGS=${_cflags} LDFLAGS=${_linker_flags} ./waf
+    configure "--prefix=${jack2_BINARY_DIR}" "-j${N}" --doxygen=no --alsa=yes
   COMMAND ./waf
   COMMAND ./waf install
   COMMAND_EXPAND_LISTS

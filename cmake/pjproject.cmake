@@ -29,14 +29,16 @@ list(APPEND pj_libraries ${pjmedia_LIBRARY})
 
 add_custom_target(pjproject DEPENDS ${pj_libraries})
 
-set_target_properties(
-  pjproject PROPERTIES RULE_LAUNCH_CUSTOM
-                       [=[env CFLAGS="-fPIC" CPPFLAGS="-fPIC"]=]
-)
+set(_cflags "")
+if(CMAKE_C_COMPILER_ID STREQUAL "Clang")
+  list(PREPEND _cflags "-fPIC")
+endif()
+list(JOIN _cflags " " _cflags)
 
 add_custom_command(
   OUTPUT ${pj_libraries}
-  COMMAND ${CMAKE_COMMAND} -E env CC=${CMAKE_C_COMPILER} ./configure
+  COMMAND ${CMAKE_COMMAND} -E env CC=${CMAKE_C_COMPILER} CFLAGS=${_cflags}
+          ./configure
   COMMAND make dep
   COMMAND make clean
   COMMAND make
