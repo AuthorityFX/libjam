@@ -4,6 +4,7 @@ FetchContent_Declare(
   pjproject
   GIT_REPOSITORY https://github.com/pjsip/pjproject.git
   GIT_TAG 2.10
+  GIT_PROGRESS True
 )
 
 FetchContent_MakeAvailable(pjproject)
@@ -27,18 +28,49 @@ list(APPEND pj_libraries ${pjsip_LIBRARY})
 list(APPEND pj_libraries ${pjnath_LIBRARY})
 list(APPEND pj_libraries ${pjmedia_LIBRARY})
 
-add_custom_target(pjproject DEPENDS ${pj_libraries})
+list(
+  APPEND
+  opus_includes
+  "${PROJECT_BINARY_DIR}/external/opus/include/opus_custom.h"
+  "${PROJECT_BINARY_DIR}/external/opus/include/opus_defines.h"
+  "${PROJECT_BINARY_DIR}/external/opus/include/opus_multistream.h"
+  "${PROJECT_BINARY_DIR}/external/opus/include/opus_projection.h"
+  "${PROJECT_BINARY_DIR}/external/opus/include/opus_types.h"
+  "${PROJECT_BINARY_DIR}/external/opus/include/opus.h"
+)
+
+add_custom_target(pjproject DEPENDS ${opus_includes} ${pj_libraries})
+
+# include opus git submodule
+add_subdirectory("${PROJECT_SOURCE_DIR}/external/opus")
+# add opus library as a dependency to pjproject target
+add_dependencies(pjproject opus)
+
+add_custom_command(
+  OUTPUT ${opus_includes}
+  COMMAND mkdir -p ${PROJECT_BINARY_DIR}/external/opus/include/opus
+  COMMAND cp -r "${PROJECT_SOURCE_DIR}/external/opus/include/."
+          ${PROJECT_BINARY_DIR}/external/opus/include/opus
+  COMMENT "Copy Opus includes to build"
+  USES_TERMINAL VERBATIM
+)
 
 set(_cflags "")
+list(PREPEND _cflags "-fPIC")
 if(CMAKE_C_COMPILER_ID STREQUAL "Clang")
-  list(PREPEND _cflags "-fPIC")
+
 endif()
 list(JOIN _cflags " " _cflags)
 
 add_custom_command(
   OUTPUT ${pj_libraries}
-  COMMAND ${CMAKE_COMMAND} -E env CC=${CMAKE_C_COMPILER} CFLAGS=${_cflags}
-          ./configure
+  COMMAND
+    ${CMAKE_COMMAND} -E env CC=${CMAKE_C_COMPILER} CFLAGS=${_cflags} ./configure
+    --disable-video --disable-g711-codec --disable-l16-codec --disable-gsm-codec
+    --disable-g722-codec --disable-g7221-codec --disable-sdl --disable-ffmpeg
+    --disable-v4l2 --disable-openh264 --disable-vpx --disable-darwin-ssl
+    --disable-opencore-amr --disable-silk --disable-bcg729 --disable-libyuv
+    --disable-libwebrtc --with-opus=${PROJECT_BINARY_DIR}/external/opus
   COMMAND make dep
   COMMAND make clean
   COMMAND make

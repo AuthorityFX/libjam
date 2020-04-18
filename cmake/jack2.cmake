@@ -4,6 +4,7 @@ FetchContent_Declare(
   jack2
   GIT_REPOSITORY https://github.com/jackaudio/jack2.git
   GIT_TAG v1.9.14
+  GIT_PROGRESS True
 )
 
 FetchContent_MakeAvailable(jack2)

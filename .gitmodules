@@ -4,3 +4,6 @@
 [submodule "external/GSL"]
 	path = external/GSL
 	url = https://github.com/microsoft/GSL.git
+[submodule "external/opus"]
+	path = external/opus
+	url = https://github.com/xiph/opus.git
