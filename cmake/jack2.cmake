@@ -9,7 +9,7 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(jack2)
 
-add_custom_target(jack2 DEPENDS "${jack2_BINARY_DIR}/include/jack/jack.h")
+add_custom_target(jack2 DEPENDS "${jack2_BINARY_DIR}/lib/libjack.so")
 
 include(ProcessorCount)
 processorcount(N)
@@ -40,7 +40,7 @@ list(JOIN _cxxflags " " _cxxflags)
 list(JOIN _linker_flags " " _linker_flags)
 
 add_custom_command(
-  OUTPUT "${jack2_BINARY_DIR}/include/jack/jack.h"
+  OUTPUT "${jack2_BINARY_DIR}/lib/libjack.so"
   COMMAND
     ${CMAKE_COMMAND} -E env CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER}
     CFLAGS=${_cflags} CXXFLAGS=${_cflags} LDFLAGS=${_linker_flags} ./waf
