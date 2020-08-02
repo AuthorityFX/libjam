@@ -1,7 +1,11 @@
+#!/bin/bash
+
 # ==============================================================================
 # libjam - C++ library for jamming over SIP protocol
 #
-# Copyright (C) 2020, Ryan P. Wilson Authority FX, Inc. www.authorityfx.com
+# Copyright (C) 2020, Ryan P. Wilson
+#   Authority FX, Inc.
+#   www.authorityfx.com
 #
 # This program is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -13,20 +17,24 @@
 # FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
 # details.
 #
-# You should have received a copy of the GNU General Public License along with
-# this program.  If not, see <https://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # ==============================================================================
 
-# Force colored output for prettier Ninja console logging
-function(force_colored_output)
-  option(FORCE_COLORED_OUTPUT
-         "Always produce ANSI-colored output (GNU/Clang only)." TRUE
-  )
-  if(${FORCE_COLORED_OUTPUT})
-    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-      add_compile_options(-fdiagnostics-color=always)
-    elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-      add_compile_options(-fcolor-diagnostics)
-    endif()
-  endif()
-endfunction()
+set -o pipefail
+set -o errtrace
+set -o errexit
+
+bold=$(tput bold)
+normal=$(tput sgr0)
+red=$(tput setaf 1)
+yellow=$(tput setaf 3)
+blue=$(tput setaf 4)
+green=$(tput setaf 2)
+
+echo "${blue}Installing${normal} ${bold}python3, python3-pip, virtualenv${normal}..."
+sudo apt-get install python3
+sudo apt-get install python3-pip
+sudo apt-get install virtualenv
+
+echo "${green}Success!${normal}"
