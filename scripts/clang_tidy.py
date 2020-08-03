@@ -21,16 +21,20 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # ==============================================================================
 
-import argparse
 import subprocess
-from typing import Optional, Sequence
+from tap import Tap
+from typing import List
 
 
-def main(argv: Optional[Sequence[str]] = None) -> int:
-    parser = argparse.ArgumentParser(description='C++ linter')
-    parser.add_argument('filenames', nargs='*', help='Filenames to lint')
-    args = parser.parse_args(argv)
+class ClangTidyArgsParser(Tap):
+    filenames: List[str]
 
+    def add_arguments(self) -> None:
+        self.add_argument('filenames')
+
+
+def main() -> int:
+    args = ClangTidyArgsParser().parse_args()
     command = ["clang-tidy"]
     # Style for formatting code around applied fixes:
     #   - 'none' (default) turns off formatting

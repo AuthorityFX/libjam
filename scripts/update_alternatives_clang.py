@@ -21,22 +21,27 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # ==============================================================================
 
-import argparse
 import subprocess
-from typing import List, Optional, Sequence
+from tap import Tap
+from typing import List
+
+
+class UpdateAlternativeArgsParser(Tap):
+    version: int
+    '''Clang version'''
+    priority: int
+    '''update-alternatives priority'''
+
+    def add_arguments(self) -> None:
+        self.add_argument('-v', '--version')
+        self.add_argument('-p', '--priority')
 
 
 class UpdateAlternative():
-    def __init__(self, argsv: Optional[Sequence[str]]) -> None:
-        parser = argparse.ArgumentParser()
-        parser.add_argument('-v', '--version', required=True, nargs=1,
-                            type=int, help='Clang version')
-        parser.add_argument('-p', '--priority', required=True, nargs=1,
-                            type=int, help='update-alternatives priority')
-        args = parser.parse_args(argsv)
-
-        self._version = args.version[0]
-        self._priority = args.priority[0]
+    def __init__(self) -> None:
+        args = UpdateAlternativeArgsParser().parse_args()
+        self._version = args.version
+        self._priority = args.priority
         self._command = ["update-alternatives"]
 
     def add_install(self, name: str) -> None:
@@ -59,10 +64,10 @@ class UpdateAlternative():
         return subprocess.call(self._command)
 
 
-def main(argv: Optional[Sequence[str]] = None) -> int:
+def main() -> int:
     return_value: int
 
-    clang_alternative = UpdateAlternative(argv)
+    clang_alternative = UpdateAlternative()
     clang_alternative.add_install('clang')
     clang_alternative.add_slaves([
         'clang++',
@@ -90,7 +95,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     if(return_value != 0):
         return return_value
 
-    llvm_alternative = UpdateAlternative(argv)
+    llvm_alternative = UpdateAlternative()
     llvm_alternative.add_install('llvm-config')
     llvm_alternative.add_slaves([
         'lld',

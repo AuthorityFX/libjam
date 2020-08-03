@@ -21,17 +21,20 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # ==============================================================================
 
-import argparse
 import subprocess
-from typing import Optional
-from typing import Sequence
+from tap import Tap
+from typing import List
 
 
-def main(argv: Optional[Sequence[str]] = None) -> int:
-    parser = argparse.ArgumentParser(description='C++ formatter')
-    parser.add_argument('filenames', nargs='*', help='Filenames to format')
-    args = parser.parse_args(argv)
+class ClangFormatArgsParser(Tap):
+    filenames: List[str]
 
+    def add_arguments(self) -> None:
+        self.add_argument('filenames')
+
+
+def main() -> int:
+    args = ClangFormatArgsParser().parse_args()
     command = ["clang-format"]
     # -i - Inplace edit <file>s, if specified.
     command.append('-i')

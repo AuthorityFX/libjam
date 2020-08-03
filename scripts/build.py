@@ -24,11 +24,9 @@
 import multiprocessing
 import subprocess
 import os
-from typing import Optional
-from typing import Sequence
 
 
-def main(argv: Optional[Sequence[str]] = None) -> int:
+def main() -> int:
     current_directory = os.path.dirname(os.path.realpath(__file__))
     project_directory = os.path.realpath(
         os.path.join(current_directory, '../'))
